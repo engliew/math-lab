@@ -36,7 +36,7 @@ export function CountBuddy({ className = "" }: { className?: string }) {
         strokeLinecap="round"
       />
       <circle cx="18" cy="28" r="7" fill="#ff8fab" />
-      <circle cx="78" cy="28" r="7" fill="#ff8fab" />
+      <circle cx="78" cy="28" r="7" fill="#4c6fff" />
     </svg>
   );
 }
