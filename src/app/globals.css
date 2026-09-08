@@ -17,25 +17,25 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --font-sans: var(--font-nunito);
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-fredoka);
 }
 
 :root {
-  --background: #f4efe4;
-  --foreground: #2a2620;
-  --card: #fffaf1;
-  --card-foreground: #2a2620;
-  --primary: #2f6a4f;
-  --primary-foreground: #f7fff8;
-  --secondary: #efe4cf;
-  --secondary-foreground: #3a3328;
-  --muted: #ece3d2;
-  --muted-foreground: #6b6256;
-  --accent: #f3d7b0;
-  --accent-foreground: #4a3218;
-  --border: #ddd2bc;
-  --input: #d8ccb4;
-  --ring: #2f6a4f;
+  --background: #fff6e8;
+  --foreground: #2d2a55;
+  --card: #ffffff;
+  --card-foreground: #2d2a55;
+  --primary: #4c6fff;
+  --primary-foreground: #ffffff;
+  --secondary: #ffe566;
+  --secondary-foreground: #3d3200;
+  --muted: #e7f3ff;
+  --muted-foreground: #5b5878;
+  --accent: #ff8fab;
+  --accent-foreground: #4a1230;
+  --border: #f0d9b5;
+  --input: #f0d9b5;
+  --ring: #4c6fff;
 }
 
 * {
@@ -49,13 +49,19 @@ body {
 
 body {
   background:
-    radial-gradient(1200px 500px at 10% -10%, #f8e8c8 0%, transparent 55%),
-    radial-gradient(900px 400px at 100% 0%, #dceadf 0%, transparent 50%),
+    radial-gradient(520px 320px at 8% -8%, #ffe27a 0%, transparent 58%),
+    radial-gradient(480px 300px at 100% 4%, #b8f0d8 0%, transparent 55%),
+    radial-gradient(420px 280px at 90% 100%, #ffc2d4 0%, transparent 50%),
+    radial-gradient(380px 240px at 0% 80%, #c9d8ff 0%, transparent 52%),
     var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 .font-display {
-  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-family: var(--font-display), ui-rounded, "Trebuchet MS", sans-serif;
+}
+
+.blob {
+  border-radius: 42% 58% 56% 44% / 46% 42% 58% 54%;
 }
