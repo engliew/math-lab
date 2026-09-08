@@ -1,0 +1,19 @@
+[Unit]
+Description=Math Lab (mathlab.engliew.xyz)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/mathlab
+Environment=NODE_ENV=production
+Environment=PORT=47821
+Environment=HOSTNAME=127.0.0.1
+Environment=MATHLAB_DATA_DIR=/opt/mathlab/data
+# Math Lab sessions live in SQLite. Do not set AUTH_SECRET here.
+# AUTH_SECRET belongs to Meridian only — leave it alone.
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
