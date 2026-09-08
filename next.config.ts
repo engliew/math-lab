@@ -2,10 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   agentRules: false,
-  output: "export",
-  trailingSlash: true,
-  images: { unoptimized: true },
+  output: "standalone",
   allowedDevOrigins: ["127.0.0.1", "localhost"],
+  serverExternalPackages: ["bcryptjs"],
 };
 
 export default nextConfig;

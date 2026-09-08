@@ -1,39 +1,81 @@
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 
 const root = resolve(import.meta.dirname, "..");
-const outDir = resolve(root, "out");
-const distName = "mathlab.engliew.xyz";
+const standaloneRoot = resolve(root, ".next/standalone");
+const distName = "mathlab";
 const distDir = resolve(root, "dist", distName);
 const tarball = resolve(root, "dist", `${distName}.tar.gz`);
 
-if (!existsSync(outDir)) {
-  console.error("Missing out/. Run npm run build first.");
+if (!existsSync(standaloneRoot)) {
+  console.error("Missing .next/standalone. Run npm run build first.");
+  process.exit(1);
+}
+
+function findServerJs(dir, depth = 0) {
+  if (depth > 4) return null;
+  const entries = readdirSync(dir, { withFileTypes: true });
+  if (entries.some((entry) => entry.isFile() && entry.name === "server.js")) {
+    return dir;
+  }
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    if (entry.name === "node_modules") continue;
+    const found = findServerJs(resolve(dir, entry.name), depth + 1);
+    if (found) return found;
+  }
+  return null;
+}
+
+const serverDir = findServerJs(standaloneRoot);
+if (!serverDir) {
+  console.error("Could not find server.js inside .next/standalone");
   process.exit(1);
 }
 
 rmSync(resolve(root, "dist"), { recursive: true, force: true });
 mkdirSync(distDir, { recursive: true });
-cpSync(outDir, distDir, { recursive: true });
-cpSync(
-  resolve(root, "deploy/nginx-mathlab.engliew.xyz.conf"),
-  resolve(distDir, "nginx-mathlab.engliew.xyz.conf"),
-);
+cpSync(serverDir, distDir, { recursive: true });
+
+const staticDir = resolve(root, ".next/static");
+if (existsSync(staticDir)) {
+  mkdirSync(resolve(distDir, ".next"), { recursive: true });
+  cpSync(staticDir, resolve(distDir, ".next/static"), { recursive: true });
+}
+
+const publicDir = resolve(root, "public");
+if (existsSync(publicDir)) {
+  cpSync(publicDir, resolve(distDir, "public"), { recursive: true });
+}
+
+cpSync(resolve(root, "deploy"), resolve(distDir, "deploy"), { recursive: true });
 
 writeFileSync(
   resolve(distDir, "DEPLOY.txt"),
   [
-    "Math Lab static site for https://mathlab.engliew.xyz",
+    "Math Lab for https://mathlab.engliew.xyz",
+    "Node standalone + SQLite. Extract to /opt/mathlab",
     "",
-    "Extract on the lab host:",
-    "  sudo mkdir -p /opt/mathlab.engliew.xyz",
-    "  sudo tar -xzf mathlab.engliew.xyz.tar.gz -C /opt",
+    "sudo mkdir -p /opt/mathlab/data",
+    "sudo tar -xzf mathlab.tar.gz -C /opt",
+    "sudo cp /opt/mathlab/deploy/mathlab.service /etc/systemd/system/",
+    "sudo cp /opt/mathlab/deploy/nginx-mathlab.engliew.xyz.conf /etc/nginx/conf.d/",
+    "sudo systemctl daemon-reload && sudo systemctl enable --now mathlab",
+    "sudo nginx -t && sudo systemctl reload nginx",
     "",
-    "Point nginx root at /opt/mathlab.engliew.xyz",
-    "(see deploy/nginx-mathlab.engliew.xyz.conf in the git repo).",
+    "MIGRATION: first start creates /opt/mathlab/data/mathlab.sqlite",
+    "(001_users_sessions_progress). Keep the data/ folder on redeploy.",
     "",
-    "No environment variables. Progress is browser localStorage.",
+    "Do not set AUTH_SECRET on this unit. That secret is Meridian only.",
+    "Math Lab uses SQLite session tokens (cookie mathlab_session).",
     "",
   ].join("\n"),
 );
