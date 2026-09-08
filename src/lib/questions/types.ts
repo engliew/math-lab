@@ -17,5 +17,8 @@ export type Question = {
 };
 
 export const BANK_SIZE = 1000;
-export const LESSON_SIZE = 50;
-export const PASS_MARK = 45;
+export const LESSON_SIZE = 20;
+/** First attempt: this many correct unlocks the next topic. */
+export const ADVANCE_MARK = 19;
+/** After a 15–18 first attempt, this many correct on the retry unlocks the next topic. */
+export const RETRY_MARK = 15;
