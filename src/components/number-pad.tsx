@@ -24,7 +24,7 @@ export function NumberPad({
           type="button"
           variant="outline"
           size="lg"
-          className="h-14 text-xl"
+          className="h-11 text-lg"
           onClick={() => onDigit(key)}
         >
           {key}
@@ -34,7 +34,7 @@ export function NumberPad({
         type="button"
         variant="secondary"
         size="lg"
-        className="h-14"
+        className="h-11"
         onClick={onDelete}
         aria-label="Delete last digit"
       >
@@ -44,7 +44,7 @@ export function NumberPad({
         type="button"
         variant="ghost"
         size="lg"
-        className="h-14 col-span-2 sm:col-span-1"
+        className="h-11 col-span-2 sm:col-span-1"
         onClick={onClear}
       >
         Clear
