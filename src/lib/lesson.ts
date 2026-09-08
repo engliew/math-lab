@@ -3,9 +3,10 @@ import { sampleIndices } from "@/lib/rng";
 import { answersMatch } from "@/lib/answers";
 import { generateQuestion } from "@/lib/questions/bank";
 import {
+  ADVANCE_MARK,
   BANK_SIZE,
   LESSON_SIZE,
-  PASS_MARK,
+  RETRY_MARK,
   type Question,
 } from "@/lib/questions/types";
 
@@ -39,7 +40,7 @@ export function markAnswer(question: Question, given: string): boolean {
 export function scoreLesson(
   questions: Question[],
   answers: Array<string | null>,
-): { correct: number; total: number; passed: boolean } {
+): { correct: number; total: number } {
   let correct = 0;
   for (let i = 0; i < questions.length; i += 1) {
     const given = answers[i];
@@ -50,7 +51,6 @@ export function scoreLesson(
   return {
     correct,
     total: questions.length,
-    passed: correct >= PASS_MARK,
   };
 }
 
@@ -58,4 +58,4 @@ export function nextTopicAfterPass(topicId: string) {
   return getNextTopic(topicId);
 }
 
-export { BANK_SIZE, LESSON_SIZE, PASS_MARK };
+export { ADVANCE_MARK, BANK_SIZE, LESSON_SIZE, RETRY_MARK };
